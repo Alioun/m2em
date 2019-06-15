@@ -21,6 +21,7 @@ class Converter:
         self.eblocation = None
         self.cbzlocation = None
         self.chapterdate = None
+        self.epublocation = None
 
 
 
@@ -55,6 +56,8 @@ class Converter:
                               self.mangatitle + "/" + self.mangatitle + "." + self.ebformat.lower())
         self.cbzlocation = str(self.saveloc + self.manganame + "/"+
                                self.mangatitle + "/" + self.mangatitle + ".cbz")
+        self.epublocation = str(self.saveloc + self.manganame + "/"+
+                               self.mangatitle + "/" + self.mangatitle + ".epub")
 
 
 
@@ -97,7 +100,8 @@ class Converter:
             logging.info("Starting conversion to Ebook of %s...", self.mangatitle)
 
             try:
-                subprocess.call(["kcc-c2e", "-p", self.ebprofile, "-f", self.ebformat,
+                subprocess.call(["kcc-c2e", "-p", self.ebprofile, "-f", "EPUB",
                                  "-m", "-r", "2", "-u", "-s", self.cbzlocation])
+                subprocess.call(["ebook-convert", self.epublocation, self.eblocation])
             except Exception as fail:
                 logging.debug("Failed to convert epub %s", fail)
